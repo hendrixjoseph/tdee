@@ -2,7 +2,7 @@ package com.joehxblog.tdee;
 
 import java.time.LocalDate;
 
-public record WeightChangeEntry(LocalDate date, int numberOfDays, int net, double changeInWeight) {
+public record WeightChangeEntry(LocalDate date, int numberOfDays, int net, double changeInWeight) implements Comparable<WeightChangeEntry> {
 
     double base(double conversion) {
         return net - changeInWeight / conversion;
@@ -20,5 +20,10 @@ public record WeightChangeEntry(LocalDate date, int numberOfDays, int net, doubl
 
     double conversion(WeightChangeEntry other) {
         return (changeInWeight - other.changeInWeight) / (net - other.net);
+    }
+
+    @Override
+    public int compareTo(WeightChangeEntry o) {
+        return date.compareTo(o.date);
     }
 }

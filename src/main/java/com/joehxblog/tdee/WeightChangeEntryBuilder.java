@@ -12,7 +12,7 @@ public class WeightChangeEntryBuilder {
         diaryEntries.stream()
                 .sorted()
                 .dropWhile(diaryEntry -> diaryEntry.weight() == null)
-                .forEach(diaryEntry -> {
+                .forEachOrdered(diaryEntry -> {
             if (currentDiaryEntries.isEmpty() || diaryEntry.weight() == null) {
                 currentDiaryEntries.add(diaryEntry);
             } else {
