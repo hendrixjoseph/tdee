@@ -19,10 +19,12 @@ public class Main {
                 .withType(DiaryEntry.class)
                 .withMappingStrategy(new RecordMappingStrategy<>(DiaryEntry.class));
 
-        var records = csvToBeanBuilder.build().parse();
+        var diaryEntries = csvToBeanBuilder.build().parse();
 
         csvReader.close();
 
-        new TdeeEntryBuilder().with(records);
+        var tdeeEntries = new TdeeEntryBuilder().with(diaryEntries);
+
+        tdeeEntries.forEach(System.out::println);
     }
 }
