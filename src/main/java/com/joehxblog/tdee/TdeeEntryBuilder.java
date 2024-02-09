@@ -28,12 +28,14 @@ public class TdeeEntryBuilder {
     }
 
     private TdeeEntry create(List<DiaryEntry> diaryEntries) {
+        var date = diaryEntries.getLast().date();
+        int numberOfDays = diaryEntries.size() - 1;
         int net = diaryEntries.stream()
-                .limit(diaryEntries.size() - 1)
+                .limit(numberOfDays)
                 .mapToInt(DiaryEntry::net)
                 .sum();
         double changeInWeight = diaryEntries.getFirst().weight() - diaryEntries.getLast().weight();
 
-        return new TdeeEntry(diaryEntries.getLast().date(), net, changeInWeight);
+        return new TdeeEntry(date, numberOfDays, net, changeInWeight);
     }
 }

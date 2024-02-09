@@ -2,7 +2,7 @@ package com.joehxblog.tdee;
 
 import java.time.LocalDate;
 
-public record TdeeEntry(LocalDate date, int net, double changeInWeight) {
+public record TdeeEntry(LocalDate date, int numberOfDays, int net, double changeInWeight) {
 
     double base(double conversion) {
         return net - changeInWeight / conversion;
