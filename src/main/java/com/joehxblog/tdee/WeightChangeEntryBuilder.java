@@ -34,7 +34,7 @@ public class WeightChangeEntryBuilder {
                 .limit(numberOfDays)
                 .mapToInt(DiaryEntry::net)
                 .sum();
-        double changeInWeight = diaryEntries.getFirst().weight() - diaryEntries.getLast().weight();
+        double changeInWeight = diaryEntries.getLast().weight() - diaryEntries.getFirst().weight();
 
         return new WeightChangeEntry(date, numberOfDays, net, changeInWeight);
     }

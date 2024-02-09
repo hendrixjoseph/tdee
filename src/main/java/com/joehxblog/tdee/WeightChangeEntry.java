@@ -22,6 +22,10 @@ public record WeightChangeEntry(LocalDate date, int numberOfDays, int net, doubl
         return (changeInWeight - other.changeInWeight) / (net - other.net);
     }
 
+    int dailyNet() {
+        return net / numberOfDays;
+    }
+
     @Override
     public int compareTo(WeightChangeEntry o) {
         return date.compareTo(o.date);

@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
     public static void main(String... args) throws URISyntaxException, IOException {
@@ -32,8 +33,42 @@ public class Main {
 
         var weightChangeEntries = new WeightChangeEntryBuilder().with(diaryEntries);
 
-        var energyExpenditures = new EnergyExpenditureBuilder().with(weightChangeEntries);
 
+
+    }
+
+    private static void compareGainVsLoss(List<WeightChangeEntry> weightChangeEntries) throws IOException {
+        var groupings = weightChangeEntries.stream().collect(
+                Collectors.partitioningBy(
+                        e -> e.changeInWeight() > 0,
+                        Collectors.mapping(WeightChangeEntry::dailyNet, Collectors.toList())
+                )
+        );
+
+        var gainedWeight = groupings.get(true);
+        var lostWeight = groupings.get(false);
+        var size = Math.max(gainedWeight.size(), lostWeight.size());
+
+        var list = IntStream.range(0, size).mapToObj(i -> {
+                    var gain = getValue(gainedWeight, i);
+                    var lost = getValue(lostWeight, i);
+
+                    return new String[] {gain, lost};
+                })
+                .toList();
+
+        write(list, "gainVsLoss.csv");
+    }
+
+    private static String getValue(List<Integer> list, int index) {
+        if (list.size() >  index) {
+            return Integer.toString(list.get(index));
+        } else {
+            return "";
+        }
+    }
+
+    private static void writeEnergyExpenditures(List<EnergyExpenditure> energyExpenditures) throws IOException {
         var list = energyExpenditures.stream()
                 .map(e -> {
                     var date = Converters.get(LocalDate.class).toString(e.date());
@@ -43,7 +78,11 @@ public class Main {
                 })
                 .toList();
 
-        var fileWriter = new FileWriter("tdee.csv");
+        write(list, "tdee.csv");
+    }
+
+    private static void write(List<String[]> list, String filename) throws IOException {
+        var fileWriter = new FileWriter(filename);
         var csvWriter = new CSVWriterBuilder(fileWriter).build();
         csvWriter.writeAll(list);
         csvWriter.close();
