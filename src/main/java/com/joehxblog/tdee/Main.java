@@ -23,8 +23,8 @@ public class Main {
 
         csvReader.close();
 
-        var tdeeEntries = new TdeeEntryBuilder().with(diaryEntries);
+        var weightChangeEntries = new WeightChangeEntryBuilder().with(diaryEntries);
 
-        tdeeEntries.forEach(System.out::println);
+        weightChangeEntries.forEach(System.out::println);
     }
 }
