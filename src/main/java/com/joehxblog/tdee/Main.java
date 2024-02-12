@@ -33,9 +33,23 @@ public class Main {
 
         var weightChangeEntries = new WeightChangeEntryBuilder().with(diaryEntries);
 
+        writeWeightChangeEntries(weightChangeEntries);
         writeEnergyExpenditures(weightChangeEntries);
         compareGainVsLoss(weightChangeEntries);
         byDayOfWeek(weightChangeEntries);
+    }
+
+    private static void writeWeightChangeEntries(List<WeightChangeEntry> weightChangeEntries) throws IOException {
+        var list = weightChangeEntries.stream().map(w -> {
+            var date = Converters.get(LocalDate.class).toString(w.date());
+            var dailyNet = Integer.toString(w.dailyNet());
+            var changeInWeight = Double.toString(w.changeInWeight());
+
+            return new String[] {date, dailyNet, changeInWeight};
+        })
+        .toList();
+
+        write(list, "changeInWeight.csv");
     }
 
     private static void byDayOfWeek(List<WeightChangeEntry> weightChangeEntries) throws IOException {
